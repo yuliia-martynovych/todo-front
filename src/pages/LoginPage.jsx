@@ -1,5 +1,6 @@
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
+import { Mountain } from "lucide-react"
 
 export default function LoginPage() {
   const [username, setUsername] = useState("")
@@ -21,11 +22,30 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-r from-purple-500 via-pink-500 to-red-500 px-4">
-      <h1
-  className="text-6xl font-extrabold text-white mb-10 drop-shadow-lg select-none"
-  style={{ fontFamily: "'Barrio', cursive" }}>Taskify</h1>
+    <div className="relative flex flex-col items-center justify-center min-h-screen bg-gradient-to-r from-purple-500 via-pink-500 to-red-500 px-4">
+      
+      <div className="absolute top-4 left-4 flex gap-2">
+  <button
+    onClick={() => navigate("/tasks")}
+    className="bg-white bg-opacity-80 hover:bg-opacity-100 text-pink-700 font-semibold px-4 py-2 rounded-lg shadow-md transition"
+  >
+    Tasks
+  </button>
+  <button
+    onClick={() => navigate("/users")}
+    className="bg-white bg-opacity-80 hover:bg-opacity-100 text-pink-700 font-semibold px-4 py-2 rounded-lg shadow-md transition"
+  >
+    Users
+  </button>
+</div>
 
+      <Mountain size={64} color="white" className="mb-4" />
+      <h1
+        className="text-6xl font-extrabold text-white mb-10 drop-shadow-lg select-none"
+        style={{ fontFamily: "'Barrio', cursive" }}
+      >
+        Taskify
+      </h1>
 
       <form
         onSubmit={handleSubmit}
