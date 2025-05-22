@@ -2,49 +2,35 @@ import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { Mountain } from "lucide-react"
 
-export default function LoginPage() {
-  const [username, setUsername] = useState("")
+export default function RegisterPage() {
+  const [name, setName] = useState("")
+  const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [error, setError] = useState("")
   const navigate = useNavigate()
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    if (
-      (username === "admin" && password === "admin") ||
-      (username === "user" && password === "user")
-    ) {
-      localStorage.setItem("user", JSON.stringify({ username }))
-      navigate("/dashboard")
-    } else {
-      setError("Invalid username or password")
+    if (!name || !email || !password) {
+      setError("All fields are required")
+      return
     }
+    // simple “create user” mock: store in localStorage
+    localStorage.setItem(
+      "user",
+      JSON.stringify({ username: name, email })
+    )
+    navigate("/tasks") // go to TaskView
   }
 
   return (
     <div className="relative flex flex-col items-center justify-center min-h-screen bg-gradient-to-r from-purple-500 via-pink-500 to-red-500 px-4">
-      {/* left-side shortcuts */}
-      <div className="absolute top-4 left-4 flex gap-2">
-        <button
-          onClick={() => navigate("/tasks")}
-          className="bg-white bg-opacity-80 hover:bg-opacity-100 text-pink-700 font-semibold px-4 py-2 rounded-lg shadow-md transition"
-        >
-          Tasks
-        </button>
-        <button
-          onClick={() => navigate("/users")}
-          className="bg-white bg-opacity-80 hover:bg-opacity-100 text-pink-700 font-semibold px-4 py-2 rounded-lg shadow-md transition"
-        >
-          Users
-        </button>
-      </div>
-
-      {/* NEW top-right Log In button */}
+      {/* back to Sign-In (optional) */}
       <button
-        onClick={() => navigate("/register")}
+        onClick={() => navigate("/")}
         className="absolute top-4 right-4 bg-white bg-opacity-80 hover:bg-opacity-100 text-pink-700 font-semibold px-4 py-2 rounded-lg shadow-md transition"
       >
-        Log&nbsp;In
+        Sign&nbsp;In
       </button>
 
       <Mountain size={64} color="white" className="mb-4" />
@@ -61,7 +47,7 @@ export default function LoginPage() {
         autoComplete="off"
       >
         <h2 className="text-3xl font-semibold text-gray-800 mb-6 text-center">
-          Sign&nbsp;In
+          Log&nbsp;In
         </h2>
 
         {error && (
@@ -70,12 +56,20 @@ export default function LoginPage() {
 
         <input
           type="text"
-          placeholder="Username"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-          className="w-full mb-5 p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500 transition"
+          placeholder="Name"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          className="w-full mb-4 p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500 transition"
           required
-          autoFocus
+        />
+
+        <input
+          type="email"
+          placeholder="Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          className="w-full mb-4 p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500 transition"
+          required
         />
 
         <input
@@ -91,7 +85,7 @@ export default function LoginPage() {
           type="submit"
           className="w-full bg-pink-600 hover:bg-pink-700 text-white font-bold py-3 rounded-lg transition shadow-md hover:shadow-lg"
         >
-          Sign&nbsp;In
+          Log&nbsp;In
         </button>
       </form>
     </div>
