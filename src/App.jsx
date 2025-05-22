@@ -1,13 +1,15 @@
-import './App.css'
-import LoginPage from './pages/LoginPage/LoginPage'
+import React from "react";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import LoginPage from "./pages/LoginPage";
+import Dashboard from "./pages/Dashboard";
 
-function App() {
-
+export default function App() {
   return (
-    <>
-      <LoginPage />
-    </>
-  )
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<LoginPage />} />
+        <Route path="/dashboard" element={<Dashboard />} />
+      </Routes>
+    </BrowserRouter>
+  );
 }
-
-export default App
