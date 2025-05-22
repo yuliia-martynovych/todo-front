@@ -44,7 +44,7 @@ export default function LoginPage() {
         onClick={() => navigate("/register")}
         className="absolute top-4 right-4 bg-white bg-opacity-80 hover:bg-opacity-100 text-pink-700 font-semibold px-4 py-2 rounded-lg shadow-md transition"
       >
-        Log&nbsp;In
+        Sign&nbsp;In
       </button>
 
       <Mountain size={64} color="white" className="mb-4" />
@@ -61,7 +61,7 @@ export default function LoginPage() {
         autoComplete="off"
       >
         <h2 className="text-3xl font-semibold text-gray-800 mb-6 text-center">
-          Sign&nbsp;In
+          Log&nbsp;In
         </h2>
 
         {error && (
@@ -91,7 +91,7 @@ export default function LoginPage() {
           type="submit"
           className="w-full bg-pink-600 hover:bg-pink-700 text-white font-bold py-3 rounded-lg transition shadow-md hover:shadow-lg"
         >
-          Sign&nbsp;In
+          Log&nbsp;In
         </button>
       </form>
     </div>
