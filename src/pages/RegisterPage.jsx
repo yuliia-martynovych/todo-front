@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Mountain } from "lucide-react";
-import { createUser, getUserByUsername } from "../services/userService.js";
+import { createUser } from "../services/userService.js";
 
 export default function RegisterPage() {
     const [name, setName] = useState("");

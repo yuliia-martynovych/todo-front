@@ -1,10 +1,11 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Mountain, PlusCircle, Trash2, List } from "lucide-react";
+import { Mountain, PlusCircle, Trash2, List, Pencil } from "lucide-react";
 import {
     createUser,
     getAllUsers,
     updateUser,
+    deleteUser,
 } from "../services/userService.js";
 
 export default function UsersView() {
@@ -15,8 +16,9 @@ export default function UsersView() {
     const [showCreateModal, setShowCreateModal] = useState(false);
     const [newName, setNewName] = useState("");
     const [newEmail, setNewEmail] = useState("");
-    const [newPassword, setNewPassword] = useState("");
+    const [newPassword, setNewPassword] = useState("123456");
     const [newIsAdmin, setNewIsAdmin] = useState(false);
+    const [editingUser, setEditingUser] = useState(null);
 
     // delete modal
     const [deleteId, setDeleteId] = useState(null);
@@ -31,35 +33,64 @@ export default function UsersView() {
     };
 
     const handleCreate = async () => {
-      try{
-        const user_data = {
-            username: newName,
-            email: newEmail,
-            password: newPassword || "123456",
-            is_admin: newIsAdmin,
-        };
-        const response = await createUser(user_data);
-        if (response) {
-            setUsers([{ id: response.id, ...user_data }, ...users]);
+        try {
+            const user_data = {
+                username: newName,
+                email: newEmail,
+                password: newPassword || "123456",
+                is_admin: newIsAdmin,
+            };
+            const response = await createUser(user_data);
+            if (response) {
+                setUsers([{ id: response.id, ...user_data }, ...users]);
+            }
+        } catch (error) {
+            console.error("Error creating user:", error);
+            alert("Error creating user. Please try again.");
+        } finally {
+            setShowCreateModal(false);
         }
-      } catch (error) {
-        console.error("Error creating user:", error);
-        alert("Error creating user. Please try again.");
-      } finally {
-        setShowCreateModal(false);
-      }
-
-        const name = newName.trim();
-        const email = newEmail.trim();
-        if (name && email) {
-            setUsers([{ id: Date.now(), name, email }, ...users]);
-        }
-        
     };
 
-    const handleDelete = () => {
-        setUsers(users.filter((u) => u.id !== deleteId));
-        setDeleteId(null);
+    const handleUpdate = async (id) => {
+        try {
+            const user_data = {
+                username: newName,
+                email: newEmail,
+                password: newPassword,
+                is_admin: newIsAdmin,
+            };
+            await updateUser(id, user_data);
+            setUsers(
+                users.map((user) =>
+                    user.id === id ? { ...user, ...user_data } : user
+                )
+            );
+        } catch (error) {
+            console.error("Error updating user:", error);
+            alert(
+                `${error.response.data.detail}` ||
+                    "An error occurred. Please try again."
+            );
+        } finally {
+            setShowCreateModal(false);
+            setEditingUser(null);
+        }
+    };
+
+    const handleDelete = async () => {
+        try {
+            await deleteUser(deleteId);
+            setUsers(users.filter((u) => u.id !== deleteId));
+        } catch (error) {
+            console.error("Error deleting user:", error);
+            alert(
+                `${error.response.data.detail}` ||
+                    "An error occurred. Please try again."
+            );
+        } finally {
+            setDeleteId(null);
+        }
     };
 
     const viewTasks = (id) => {
@@ -108,7 +139,7 @@ export default function UsersView() {
                             No users available
                         </li>
                     )}
-                    {users.map(({ id, username, email, is_admin }) => (
+                    {users.slice().reverse().map(({ id, username, email, is_admin }) => (
                         <li
                             key={id}
                             className="flex justify-between items-center py-4"
@@ -139,6 +170,21 @@ export default function UsersView() {
                                 >
                                     <Trash2 size={20} />
                                 </button>
+                                {/* edit user */}
+                                <button
+                                    onClick={() => {
+                                        setNewName(username);
+                                        setNewEmail(email);
+                                        setNewPassword("123456");
+                                        setNewIsAdmin(is_admin);
+                                        setEditingUser(id);
+                                        setShowCreateModal(true);
+                                    }}
+                                    title="Edit user"
+                                    className="text-yellow-600 hover:text-yellow-800 transition"
+                                >
+                                    <Pencil size={20} />
+                                </button>
                             </div>
                         </li>
                     ))}
@@ -150,7 +196,7 @@ export default function UsersView() {
                 <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-50">
                     <div className="bg-white rounded-xl p-6 w-full max-w-sm shadow-lg">
                         <h2 className="text-xl font-semibold mb-4">
-                            Add New User
+                            {editingUser ? "Edit User" : "Add New User"}
                         </h2>
                         <input
                             type="text"
@@ -171,27 +217,35 @@ export default function UsersView() {
                             type="text"
                             placeholder="Password (Default: 123456)"
                             value={newPassword}
-                            onChange={(e) => setNewEmail(e.target.value)}
+                            onChange={(e) => setNewPassword(e.target.value)}
                             className="w-full mb-6 p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500"
                         />
-                        <span><input
-                            type="checkbox"
-                            className="mr-2"
-                            checked={newIsAdmin}
-                            onChange={(e) => setNewIsAdmin(e.target.checked)}
-                        /> Is admin? </span>
+                        <span>
+                            <input
+                                type="checkbox"
+                                className="mr-2"
+                                checked={newIsAdmin}
+                                onChange={(e) =>
+                                    setNewIsAdmin(e.target.checked)
+                                }
+                            />{" "}
+                            Is admin?{" "}
+                        </span>
                         <div className="flex justify-end space-x-4">
                             <button
-                                onClick={() => setShowCreateModal(false)}
+                                onClick={() => {
+                                    setShowCreateModal(false);
+                                    setEditingUser(null);
+                                }}
                                 className="px-4 py-2 rounded-lg bg-gray-200 hover:bg-gray-300 transition font-semibold"
                             >
                                 Cancel
                             </button>
                             <button
-                                onClick={handleCreate}
+                                onClick={editingUser ? () => handleUpdate(editingUser) : handleCreate}
                                 className="px-4 py-2 rounded-lg bg-pink-600 hover:bg-pink-700 text-white font-semibold transition"
                             >
-                                Add
+                                {editingUser ? "Update" : "Add"}
                             </button>
                         </div>
                     </div>

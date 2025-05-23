@@ -34,20 +34,7 @@ export default function LoginPage() {
     return (
         <div className="relative flex flex-col items-center justify-center min-h-screen bg-gradient-to-r from-purple-500 via-pink-500 to-red-500 px-4">
             {/* left-side shortcuts */}
-            <div className="absolute top-4 left-4 flex gap-2">
-                <button
-                    onClick={() => navigate("/tasks")}
-                    className="bg-white bg-opacity-80 hover:bg-opacity-100 text-pink-700 font-semibold px-4 py-2 rounded-lg shadow-md transition"
-                >
-                    Tasks
-                </button>
-                <button
-                    onClick={() => navigate("/users")}
-                    className="bg-white bg-opacity-80 hover:bg-opacity-100 text-pink-700 font-semibold px-4 py-2 rounded-lg shadow-md transition"
-                >
-                    Users
-                </button>
-            </div>
+            
 
             {/* NEW top-right Log In button */}
             <button
