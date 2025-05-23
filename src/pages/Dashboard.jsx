@@ -7,6 +7,7 @@ export default function Dashboard() {
     localStorage.removeItem("user")
     navigate("/")
   }
+  const id = JSON.parse(localStorage.getItem("user")).id
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-r from-purple-500 via-pink-500 to-red-500 text-white px-4">
@@ -16,7 +17,7 @@ export default function Dashboard() {
 
       <div className="flex space-x-6 mb-10">
         <button
-          onClick={() => navigate("/tasks")}
+          onClick={() => navigate(`/tasks?userId=${id}`)}
           className="bg-white bg-opacity-90 text-pink-700 font-bold py-3 px-6 rounded-xl shadow-md hover:shadow-lg transition hover:bg-opacity-100"
         >
           Tasks
