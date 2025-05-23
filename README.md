@@ -17,7 +17,7 @@ This repository contains the **web interface** for managing tasks, built using *
 -   React 18+
 -   React Router
 -   Axios
--   CSS Modules / Tailwind CSS _(replace depending on your project)_
+-   Tailwind CSS
 -   Integration with Python + PostgreSQL backend API
 
 ---
@@ -26,6 +26,7 @@ This repository contains the **web interface** for managing tasks, built using *
 
 ### 🔐 Authentication
 
+-   User registration (default role: regular user).
 -   Login with username and password
 -   User roles: regular user / admin
 
@@ -39,11 +40,14 @@ This repository contains the **web interface** for managing tasks, built using *
 -   View all users
 -   Add users
 -   Delete users
+-   Modify users
+-   View user's tasks
 
 ---
 
 ## 🗂️ Project Structure
 
+```
 todo_front/
 ├── public/
 ├── src/
@@ -56,6 +60,7 @@ todo_front/
 ├── package.json
 ├── README.md
 └── ...
+```
 
 ## ⚙️ Getting Started
 
